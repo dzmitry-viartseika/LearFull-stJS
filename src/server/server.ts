@@ -1,13 +1,30 @@
-import express from 'express'
+import express from 'express';
+import mongoose from 'mongoose';
+import http from 'http';
+import {PORT, HOST, MONGODB_URI} from "./config";
+const app = express();
+const server = http.createServer(app);
+//
+// server.use(express.static('dist'));
+//
+// server.use("/", (req, res) => {
+//     res.send('Hello express')
+// })
+//
+// server.listen(PORT, HOST, () => {
+//     console.log(`Express server is listening at ${SERVER_URL}`)
+// });
 
-const server = express();
+const startApp = async () => {
+    console.log('wertey', MONGODB_URI)
+    try {
+        await mongoose.connect(MONGODB_URI)
+        server.listen(PORT, () => {
+            console.log(`Backend is running on the ${PORT}`);
+        })
+    } catch (e) {
+        console.log(e);
+    }
+}
 
-server.use(express.static('dist'));
-
-server.use("/", (req, res) => {
-    res.send('Hello express')
-})
-
-server.listen(8080, "localhost", () => {
-    console.log('Express server is listening at hhtp://0.0.0.0:8080')
-});
+startApp();
